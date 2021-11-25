@@ -1,0 +1,14 @@
+{
+  "name": "essential-favorites",
+  "version-string": "2.2.0",
+  "description": "Essential Favorites",
+  "homepage": "",
+  "license": "MIT",
+  "dependencies": [
+    "boost-stl-interfaces",
+    "rsm-binary-io",
+    "simpleini",
+    "spdlog",
+    "xbyak"
+  ]
+}
