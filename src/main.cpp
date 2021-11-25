@@ -38,7 +38,7 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ REL::ID(50453) };
+			REL::Relocation<std::uintptr_t> func{ REL::ID(51358) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x106);
 		}
 	}
@@ -47,8 +47,8 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ REL::ID(50061) };
-			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x25);
+			REL::Relocation<std::uintptr_t> func{ REL::ID(51001) };
+			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x2B);
 		}
 	}
 
@@ -56,7 +56,7 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ REL::ID(15811) };
+			REL::Relocation<std::uintptr_t> func{ REL::ID(16049) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x07);
 		}
 	}
@@ -65,8 +65,8 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ REL::ID(36523) };
-			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x71);
+			REL::Relocation<std::uintptr_t> func{ REL::ID(37523) };
+			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x70);
 		}
 	}
 
@@ -74,8 +74,8 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ REL::ID(50978) };
-			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x38);
+			REL::Relocation<std::uintptr_t> func{ REL::ID(51857) };
+			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x34);
 		}
 	}
 
@@ -83,8 +83,8 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ REL::ID(50454) };
-			stl::write_thunk_call<detail::Enchanting::IsQuestObject>(func.address() + 0x133);
+			REL::Relocation<std::uintptr_t> func{ REL::ID(51359) };
+			stl::write_thunk_call<detail::Enchanting::IsQuestObject>(func.address() + 0x140);
 		}
 	}
 
@@ -92,8 +92,8 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ REL::ID(50688) };
-			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x1C);
+			REL::Relocation<std::uintptr_t> func{ REL::ID(51584) };
+			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0xBF);
 		}
 	}
 
@@ -124,19 +124,26 @@ namespace EssentialFavorites
 	}
 }
 
-extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
+extern "C" DLLEXPORT constinit auto SKSEPlugin_Version = []() {
+	SKSE::PluginVersionData v;
+	v.PluginVersion(Version::MAJOR);
+	v.PluginName("Essential Favorites");
+	v.AuthorName("powerofthree");
+	v.UsesAddressLibrary(true);
+	v.CompatibleVersions({ SKSE::RUNTIME_LATEST });
+
+	return v;
+}();
+
+void InitializeLog()
 {
-#ifndef NDEBUG
-	auto sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
-#else
 	auto path = logger::log_directory();
 	if (!path) {
-		return false;
+		stl::report_and_fail("Failed to find standard logging directory"sv);
 	}
 
 	*path /= fmt::format(FMT_STRING("{}.log"), Version::PROJECT);
 	auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
-#endif
 
 	auto log = std::make_shared<spdlog::logger>("global log"s, std::move(sink));
 
@@ -151,35 +158,19 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 	spdlog::set_pattern("[%H:%M:%S] %v"s);
 
 	logger::info(FMT_STRING("{} v{}"), Version::PROJECT, Version::NAME);
-
-	a_info->infoVersion = SKSE::PluginInfo::kVersion;
-	a_info->name = "Favorite Misc Items";
-	a_info->version = Version::MAJOR;
-
-	if (a_skse->IsEditor()) {
-		logger::critical("Loaded in editor, marking as incompatible"sv);
-		return false;
-	}
-
-	const auto ver = a_skse->RuntimeVersion();
-	if (ver < SKSE::RUNTIME_1_5_39) {
-		logger::critical(FMT_STRING("Unsupported runtime version {}"), ver.string());
-		return false;
-	}
-
-	return true;
 }
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
-	logger::info("loaded plugin");
+	InitializeLog();
+
+	logger::info("loaded");
 
 	SKSE::Init(a_skse);
-
-	SKSE::AllocTrampoline(14);
-
-	auto trampolineSpace = Settings::GetSingleton()->Load();
-	SKSE::AllocTrampoline(trampolineSpace);
+	
+	Settings::GetSingleton()->Load();
+	
+	SKSE::AllocTrampoline(28);
 	
 	EssentialFavorites::Install();
 
