@@ -40,6 +40,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(51358) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x106);
+
+			logger::info("patched alchemy");
 		}
 	}
 	
@@ -49,6 +51,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(51001) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x2B);
+
+			logger::info("patched batering ");
 		}
 	}
 
@@ -58,6 +62,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(16049) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x07);
+
+			logger::info("patched crafting");
 		}
 	}
 
@@ -67,6 +73,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(37523) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x70);
+
+			logger::info("patched disarm");
 		}
 	}
 
@@ -76,6 +84,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(51857) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x34);
+
+			logger::info("patched drop object");
 		}
 	}
 
@@ -85,6 +95,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(51359) };
 			stl::write_thunk_call<detail::Enchanting::IsQuestObject>(func.address() + 0x140);
+
+			logger::info("patched enchanting");
 		}
 	}
 
@@ -92,8 +104,10 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ REL::ID(51584) };
-			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0xBF);
+			REL::Relocation<std::uintptr_t> func{ REL::ID(51583) };
+			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0xC3);
+
+			logger::info("patched gifting");
 		}
 	}
 

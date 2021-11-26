@@ -12,7 +12,7 @@ public:
 	void Load()
 	{
 				
-		constexpr auto path = L"Data/SKSE/Plugins/po3_OxygenMeter.ini";
+		constexpr auto path = L"Data/SKSE/Plugins/po3_EssentialFavorites.ini";
 
 		CSimpleIniA ini;
 		ini.SetUnicode();
