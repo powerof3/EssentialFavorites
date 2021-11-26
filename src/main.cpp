@@ -40,6 +40,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(50453) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x106);
+
+			logger::info("patched alchemy");
 		}
 	}
 	
@@ -49,6 +51,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(50061) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x25);
+
+			logger::info("patched bartering");
 		}
 	}
 
@@ -58,6 +62,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(15811) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x07);
+
+			logger::info("patched crafting");
 		}
 	}
 
@@ -67,6 +73,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(36523) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x71);
+
+			logger::info("patched disarming");
 		}
 	}
 
@@ -76,6 +84,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(50978) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x38);
+
+			logger::info("patched dropping");
 		}
 	}
 
@@ -85,6 +95,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(50454) };
 			stl::write_thunk_call<detail::Enchanting::IsQuestObject>(func.address() + 0x133);
+
+			logger::info("patched enchanting");
 		}
 	}
 
@@ -94,6 +106,8 @@ namespace EssentialFavorites
 		{
 			REL::Relocation<std::uintptr_t> func{ REL::ID(50688) };
 			stl::write_thunk_call<detail::IsQuestObject>(func.address() + 0x1C);
+
+			logger::info("patched gifting");
 		}
 	}
 
@@ -176,10 +190,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	SKSE::Init(a_skse);
 
-	SKSE::AllocTrampoline(14);
-
-	auto trampolineSpace = Settings::GetSingleton()->Load();
-	SKSE::AllocTrampoline(trampolineSpace);
+	Settings::GetSingleton()->Load();
+	SKSE::AllocTrampoline(28);
 	
 	EssentialFavorites::Install();
 
