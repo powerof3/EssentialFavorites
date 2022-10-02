@@ -119,7 +119,9 @@ namespace EssentialFavorites
 	{
 		const auto settings = Settings::GetSingleton();
 
-		if (settings->noAlchemy) {
+		SKSE::AllocTrampoline(28);
+
+	    if (settings->noAlchemy) {
 			Alchemy::Patch();
 		}
 		if (settings->noBarter) {
