@@ -31,8 +31,17 @@ namespace EssentialFavorites
 	{
 		void Patch()
 		{
-			REL::Relocation<std::uintptr_t> func{ RELOCATION_ID(50061, 51001), OFFSET(0x25, 0x2B) };
-			stl::write_thunk_call<IsQuestObject>(func.address());
+			std::array funcs{
+				std::make_pair(RELOCATION_ID(50061, 51001), OFFSET(0x25, 0x2B)),  // BarterMenu::FilterSeller
+#ifdef SKYRIM_AE
+				std::make_pair(REL::ID(50960), 0x1DF)  // BarterMenu::sub_140892B00
+#endif
+			};
+
+			for (const auto& [id, offset] : funcs) {
+				REL::Relocation<std::uintptr_t> func{ id, offset };
+				stl::write_thunk_call<IsQuestObject>(func.address());
+			}
 
 			logger::info("patched bartering");
 		}
@@ -86,7 +95,7 @@ namespace EssentialFavorites
 			static inline REL::Relocation<decltype(thunk)> func;
 		};
 
-	    void Patch()
+		void Patch()
 		{
 			REL::Relocation<std::uintptr_t> func{ RELOCATION_ID(50454, 51359), OFFSET(0x133, 0x140) };
 			stl::write_thunk_call<Enchanting::IsQuestObject>(func.address());
