@@ -9,9 +9,22 @@ public:
 		return std::addressof(singleton);
 	}
 
+	bool noBarter{ true };
+	bool noDisarmed{ true };
+	bool noAlchemy{ true };
+	bool noCrafting{ true };
+	bool noDisenchanting{ true };
+	bool noDrop{ false };
+	bool noGifting{ false };
+
+private:
+	Settings()
+	{
+		Load();
+	}
+
 	void Load()
 	{
-				
 		constexpr auto path = L"Data/SKSE/Plugins/po3_EssentialFavorites.ini";
 
 		CSimpleIniA ini;
@@ -30,16 +43,7 @@ public:
 		ini.SaveFile(path);
 	}
 
-	bool noBarter{ true };
-	bool noDisarmed{ true };
-	bool noAlchemy{ true };
-	bool noCrafting{ true };
-	bool noDisenchanting{ true };
-	bool noDrop{ false };
-	bool noGifting{ false };
-
-private:
-	struct detail
+    struct detail
 	{
 		static void get_value(CSimpleIniA& a_ini, bool& a_value, const char* a_section, const char* a_key, const char* a_comment)
 		{
